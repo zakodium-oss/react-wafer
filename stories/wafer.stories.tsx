@@ -7,14 +7,6 @@ export default {
   title: 'Example/Wafer',
   component: Wafer,
   argTypes: {
-    rows: {
-      defaultValue: '6',
-      control: 'number',
-    },
-    columns: {
-      defaultValue: '7',
-      control: 'number',
-    },
     onSelect: { action: 'onSelect' },
   },
 } as Meta;
@@ -27,7 +19,9 @@ export function Control(props: WaferProps) {
       pickedItems={pickedItems}
       selected={selected}
       size={320}
-      {...props}
+      diameter={{ value: 300, units: 'mm' }}
+      chipHeight={{ value: 20, units: 'mm' }}
+      chipWidth={{ value: 20, units: 'mm' }}
     />
   );
 }
