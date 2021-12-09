@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.0.0](https://www.github.com/zakodium/react-wafer/compare/v1.1.0...v2.0.0) (2021-12-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* doesn't use rows
+
+### Features
+
+* exports parser utils and dpw calculation ([22175b1](https://www.github.com/zakodium/react-wafer/commit/22175b185eda948d3e5f470d51216a22992d871b))
+* use wafer physical dimesions for rendering of grid ([360103f](https://www.github.com/zakodium/react-wafer/commit/360103f9b78d0df9b6e5c7a82ed9754f72f909b1))
+
 ## [1.1.0](https://www.github.com/zakodium/react-wafer/compare/v1.0.1...v1.1.0) (2021-03-15)
 
 
