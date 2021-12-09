@@ -1,6 +1,7 @@
+import type { Value } from 'cheminfo-types';
 import React, { useMemo } from 'react';
 
-import { calculateRadius, listLabels } from './utils';
+import { calculateDivisions, listLabels, unifyUnits } from './utils';
 
 // An item is a square in the wafer grid
 export interface WaferItem {
@@ -11,47 +12,78 @@ export interface WaferItem {
 // Main component properties
 type PositionType = Record<'x' | 'y', number>;
 export interface WaferProps {
-  rows: number;
-  columns: number;
+  diameter: Value;
+  chipWidth: Value;
+  chipHeight: Value;
   size: number;
-  pickedItems: WaferItem[]; // List of taken items
+  /** List of taken items */
+  pickedItems: WaferItem[];
   onSelect?: (position: PositionType, label: string, picked: boolean) => void;
   selected?: Array<PositionType | string>;
+  hideText?: boolean;
 }
 
 export function Wafer(props: WaferProps) {
   const {
-    rows,
-    columns,
+    diameter,
+    chipWidth,
+    chipHeight,
     size,
     pickedItems = [],
-    onSelect,
+    hideText = false,
     selected = [],
+    onSelect,
   } = props;
-  const devices = useMemo(() => listLabels(rows, columns, pickedItems), [
-    rows,
-    columns,
-    pickedItems,
-  ]);
 
-  const squareWidth = size / columns;
-  const squareHeight = size / rows;
+  const { rows, columns, width, height, center, radius } = useMemo(() => {
+    const diameterPhysical = unifyUnits(diameter);
+    const widthPhysical = unifyUnits(chipWidth);
+    const heightPhysical = unifyUnits(chipHeight);
+
+    const columns = calculateDivisions(diameterPhysical, widthPhysical);
+    const rows = calculateDivisions(diameterPhysical, heightPhysical);
+
+    const widthSvg = size / columns;
+    const heightSvg = size / rows;
+    const radius = (diameterPhysical * widthSvg) / (2 * widthPhysical);
+    return {
+      rows,
+      columns,
+      radius,
+      width: widthSvg,
+      height: heightSvg,
+      center: size / 2,
+    };
+  }, [diameter, chipWidth, chipHeight, size]);
+
+  const devices = useMemo(
+    () =>
+      listLabels({
+        rows,
+        columns,
+        picked: pickedItems,
+        width,
+        height,
+        center,
+        radius,
+      }),
+    [rows, columns, pickedItems, width, height, center, radius],
+  );
+
   const groupsSquares = useMemo(() => {
     let groupsSquares = new Array(rows);
     for (let row = 0; row < rows; row++) {
       let rowGroup = new Array(columns);
       for (let column = 0; column < columns; column++) {
         const index = row * columns + column;
-        const translate = `translate(${column * squareWidth}, ${
-          row * squareHeight
-        })`;
+        const translate = `translate(${column * width}, ${row * height})`;
         rowGroup[column] = (
           <g key={column} transform={translate}>
             <rect
               x={0}
               y={0}
-              width={squareWidth}
-              height={squareHeight}
+              width={width}
+              height={height}
               fill={devices[index].picked ? '#5dbb6d' : 'transparent'}
               stroke="#222"
               onClick={() =>
@@ -62,21 +94,23 @@ export function Wafer(props: WaferProps) {
                 )
               }
             />
-            <text
-              x={squareWidth / 2}
-              y={squareHeight / 2}
-              dominantBaseline="middle"
-              textAnchor="middle"
-            >
-              {devices[index].label}
-            </text>
+            {!hideText && (
+              <text
+                x={width / 2}
+                y={height / 2}
+                dominantBaseline="middle"
+                textAnchor="middle"
+              >
+                {devices[index].label}
+              </text>
+            )}
           </g>
         );
       }
       groupsSquares[row] = <g key={row}>{rowGroup}</g>;
     }
     return groupsSquares;
-  }, [rows, columns, squareWidth, squareHeight, devices, onSelect]);
+  }, [rows, columns, devices, hideText, onSelect]);
 
   const selectionBorders = useMemo(
     () =>
@@ -86,12 +120,12 @@ export function Wafer(props: WaferProps) {
             // string
             const index = devices.findIndex(({ label }) => label === val);
             if (index < 0) return null;
-            const x = (index % columns) * squareWidth;
-            const y = Math.floor(index / columns) * squareHeight;
+            const x = (index % columns) * width;
+            const y = Math.floor(index / columns) * height;
             return (
               <path
                 key={`string-${val}`}
-                d={`M${x} ${y}h${squareWidth}v${squareHeight}h${-squareWidth}Z`}
+                d={`M${x} ${y}h${width}v${height}h${-width}Z`}
                 fill="none"
                 stroke="red"
               />
@@ -103,9 +137,7 @@ export function Wafer(props: WaferProps) {
             return (
               <path
                 key={`coord-${x}-${y}`}
-                d={`M${x * squareWidth} ${
-                  y * squareHeight
-                }h${squareWidth}v${squareHeight}h${-squareWidth}Z`}
+                d={`M${x * width} ${y * height}h${width}v${height}h${-width}Z`}
                 fill="none"
                 stroke="red"
               />
@@ -118,17 +150,12 @@ export function Wafer(props: WaferProps) {
           }
         }
       }),
-    [columns, squareWidth, squareHeight, devices, selected],
+    [columns, devices, selected],
   );
 
   return (
     <svg height={size} width={size}>
-      <circle
-        cx={size / 2}
-        cy={size / 2}
-        fill="#549ADA"
-        r={calculateRadius(size, rows, columns)}
-      />
+      <circle cx={center} cy={center} fill="#549ADA" r={radius} />
       {groupsSquares}
       {selectionBorders}
     </svg>

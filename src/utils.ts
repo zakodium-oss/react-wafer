@@ -1,38 +1,84 @@
+import type { Value } from 'cheminfo-types';
+import Qty from 'js-quantities';
+
 import { WaferItem } from './Wafer';
 
-/**
- * Return ordered list of labels for the grid
- * @param rows Number of rows
- * @param columns Number of columns
- * @param picked List of picked items
- * @returns List of labels, with a number if the square is complete, empty othewise
- */
-export function listLabels(
-  rows: number,
-  columns: number,
-  picked: WaferItem[],
-): Array<{ label: string; picked: boolean }> {
+export function unifyUnits(value: Value) {
+  return Qty(value.value, value.units ?? 'mm').to('mm').scalar;
+}
+
+export function calculateDPW(diameter: number, area: number) {
+  return (
+    (Math.PI * diameter * diameter) / (4 * area) -
+    (Math.PI * diameter * 0.58) / Math.sqrt(area)
+  );
+}
+
+export function calculateDivisions(diameter: number, length: number) {
+  const divisions = Math.floor(diameter / length);
+  const remainder = diameter % length;
+  return divisions + (remainder > 0 ? 2 : 1);
+}
+
+function distance(x: number, y: number, center: number) {
+  return Math.sqrt(Math.pow(x - center, 2) + Math.pow(y - center, 2));
+}
+
+interface DistanceMax {
+  column: number;
+  width: number;
+  row: number;
+  height: number;
+  center: number;
+}
+export function maxDistance({
+  column,
+  width,
+  row,
+  height,
+  center,
+}: DistanceMax) {
+  return Math.max(
+    distance(column * width, row * height, center),
+    distance(column * width + width, row * height, center),
+    distance(column * width, row * height + height, center),
+    distance(column * width + width, row * height + height, center),
+  );
+}
+
+interface LabelsParams {
+  columns: number;
+  rows: number;
+  picked: WaferItem[];
+  width: number;
+  height: number;
+  center: number;
+  radius: number;
+}
+export function listLabels({
+  rows,
+  columns,
+  picked,
+  width,
+  height,
+  center,
+  radius,
+}: LabelsParams): Array<{ label: string; picked: boolean }> {
   let labels = new Array(rows * columns);
   let index = 0;
   let currNumber = 0;
 
   for (let row = 0; row < rows; row++) {
     for (let column = 0; column < columns; column++) {
-      if (
-        // Borders
-        row === 0 ||
-        column === 0 ||
-        column + 1 >= columns ||
-        row + 1 >= rows
-      ) {
-        labels[index] = { label: '', picked: false };
-      } else if (
-        // Edges
-        (row === 1 && column === 1) ||
-        (row === 1 && column === columns - 2) ||
-        (row === rows - 2 && column === 1) ||
-        (row === rows - 2 && column === columns - 2)
-      ) {
+      const pointRadius = maxDistance({
+        column,
+        width,
+        row,
+        height,
+        center,
+      });
+
+      if (pointRadius >= radius) {
         labels[index] = { label: '', picked: false };
       } else {
         const label = String(++currNumber);
@@ -45,24 +91,4 @@ export function listLabels(
     }
   }
   return labels;
-}
-
-/**
- * Calculates the diameter of the inscribed circle
- * @param size Pixel's size of the parent square
- * @param rows Number of rows
- * @param columns Number of columns
- * @returns diameter in pixels of the inscribed circle
- */
-export function calculateRadius(
-  size: number,
-  rows: number,
-  columns: number,
-): number {
-  const step = { x: size / columns, y: size / rows };
-  const cathetus = {
-    x: (columns - (columns > rows ? 2 : 4)) * step.x,
-    y: (columns - (columns > rows ? 4 : 2)) * step.x,
-  };
-  return Math.sqrt(Math.pow(cathetus.x, 2) + Math.pow(cathetus.y, 2)) / 2;
 }
