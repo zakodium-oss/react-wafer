@@ -3,15 +3,33 @@ import Qty from 'js-quantities';
 
 import { WaferItem } from './Wafer';
 
-export function unifyUnits(value: Value) {
-  return Qty(value.value, value.units ?? 'mm').to('mm').scalar;
-}
-
+/**
+ * Calculate the approximated number of dices per wafer.
+ * @param diameter - Diameter of the wafer
+ * @param area - Area of the wafer sample
+ * @returns Approximate number of wafer items
+ */
 export function calculateDPW(diameter: number, area: number) {
   return (
     (Math.PI * diameter * diameter) / (4 * area) -
     (Math.PI * diameter * 0.58) / Math.sqrt(area)
   );
+}
+
+/**
+ * Parse a string to a number-units pair.
+ * @param text - Value in a text format
+ * @example '1.5 m' -> {value: 1.5, units: 'm'}
+ * @returns Formatted value
+ */
+export function fromTextToValue(text: string): Value {
+  const parser = new Qty(text);
+  return { value: parser.scalar, units: parser.units() };
+}
+
+const UNITS = 'mm';
+export function unifyUnits(value: Value) {
+  return Qty(value.value, value.units ?? UNITS).to(UNITS).scalar;
 }
 
 export function calculateDivisions(diameter: number, length: number) {
@@ -49,12 +67,20 @@ export function maxDistance({
 interface LabelsParams {
   columns: number;
   rows: number;
+  /** List of dices that are assigned to a user */
   picked: WaferItem[];
   width: number;
   height: number;
   center: number;
   radius: number;
 }
+
+/**
+ * Iterates over the wafer grid and returns the labels for each item, calculating the dices
+ * that are inside the wafer.
+ * @param labelsParams - Labels parameters
+ * @returns Labels for all the wafer dices, including the picked ones
+ */
 export function listLabels({
   rows,
   columns,

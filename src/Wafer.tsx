@@ -110,7 +110,7 @@ export function Wafer(props: WaferProps) {
       groupsSquares[row] = <g key={row}>{rowGroup}</g>;
     }
     return groupsSquares;
-  }, [rows, columns, devices, hideText, onSelect]);
+  }, [rows, columns, height, width, devices, hideText, onSelect]);
 
   const selectionBorders = useMemo(
     () =>
@@ -150,7 +150,7 @@ export function Wafer(props: WaferProps) {
           }
         }
       }),
-    [columns, devices, selected],
+    [columns, devices, height, width, selected],
   );
 
   return (
