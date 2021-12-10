@@ -18,6 +18,7 @@ export interface WaferProps {
   size: number;
   /** List of taken items */
   pickedItems: WaferItem[];
+  prepend?: string;
   onSelect?: (position: PositionType, label: string, picked: boolean) => void;
   selected?: Array<PositionType | string>;
   hideText?: boolean;
@@ -30,6 +31,7 @@ export function Wafer(props: WaferProps) {
     chipHeight,
     size,
     pickedItems = [],
+    prepend = '',
     hideText = false,
     selected = [],
     onSelect,
@@ -59,6 +61,7 @@ export function Wafer(props: WaferProps) {
   const devices = useMemo(
     () =>
       listLabels({
+        prepend,
         rows,
         columns,
         picked: pickedItems,
@@ -67,7 +70,7 @@ export function Wafer(props: WaferProps) {
         center,
         radius,
       }),
-    [rows, columns, pickedItems, width, height, center, radius],
+    [prepend, rows, columns, pickedItems, width, height, center, radius],
   );
 
   const groupsSquares = useMemo(() => {

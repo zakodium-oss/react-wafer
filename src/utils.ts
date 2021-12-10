@@ -65,6 +65,7 @@ export function maxDistance({
 }
 
 interface LabelsParams {
+  prepend: string;
   columns: number;
   rows: number;
   /** List of dices that are assigned to a user */
@@ -82,6 +83,7 @@ interface LabelsParams {
  * @returns Labels for all the wafer dices, including the picked ones
  */
 export function listLabels({
+  prepend,
   rows,
   columns,
   picked,
@@ -107,7 +109,7 @@ export function listLabels({
       if (pointRadius >= radius) {
         labels[index] = { label: '', picked: false };
       } else {
-        const label = String(++currNumber);
+        const label = `${prepend}${++currNumber}`;
         const pickedSearch = picked.find((item) => item.index === label);
         labels[index] = pickedSearch
           ? { label: pickedSearch.label || label, picked: true }
