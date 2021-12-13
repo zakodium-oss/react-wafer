@@ -108,7 +108,7 @@ export function Wafer(props: WaferProps) {
                 y={height / 2}
                 dominantBaseline="middle"
                 textAnchor="middle"
-                style={textStyle}
+                style={{ ...textStyle, userSelect: 'none' }}
               >
                 {devices[index].label}
               </text>
