@@ -81,7 +81,17 @@ export function Wafer(props: WaferProps) {
         const index = row * columns + column;
         const translate = `translate(${column * width}, ${row * height})`;
         rowGroup[column] = (
-          <g key={column} transform={translate}>
+          <g
+            key={column}
+            transform={translate}
+            onClick={() =>
+              onSelect(
+                { x: column, y: row },
+                devices[index].label,
+                devices[index].picked,
+              )
+            }
+          >
             <rect
               x={0}
               y={0}
@@ -89,13 +99,6 @@ export function Wafer(props: WaferProps) {
               height={height}
               fill={devices[index].picked ? '#5dbb6d' : 'transparent'}
               stroke="#222"
-              onClick={() =>
-                onSelect(
-                  { x: column, y: row },
-                  devices[index].label,
-                  devices[index].picked,
-                )
-              }
             />
             {!hideText && (
               <text
