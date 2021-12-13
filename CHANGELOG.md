@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://www.github.com/zakodium/react-wafer/compare/v2.0.0...v2.1.0) (2021-12-13)
+
+
+### Features
+
+* add prepend text to labels ([#10](https://www.github.com/zakodium/react-wafer/issues/10)) ([d11fe95](https://www.github.com/zakodium/react-wafer/commit/d11fe955c4ef3d89a1995525a1e35b6e0b3471bd))
+
 ## [2.0.0](https://www.github.com/zakodium/react-wafer/compare/v1.1.0...v2.0.0) (2021-12-09)
 
 
