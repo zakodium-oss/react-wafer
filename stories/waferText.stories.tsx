@@ -17,6 +17,7 @@ export default {
     hideText: false,
     chipHeight: '70 mm',
     chipWidth: '50 mm',
+    prepend: 'A',
   },
 } as Meta<typeof Wafer>;
 
