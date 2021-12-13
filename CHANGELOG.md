@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.2.0](https://www.github.com/zakodium/react-wafer/compare/v2.1.0...v2.2.0) (2021-12-13)
+
+
+### Features
+
+* add style to text ([0cbd5ca](https://www.github.com/zakodium/react-wafer/commit/0cbd5ca5fa1191341bf772ef85f595480e7f3e0c))
+
+
+### Bug Fixes
+
+* disable text selection ([c559fa2](https://www.github.com/zakodium/react-wafer/commit/c559fa22fc2f89f379b78f5cfe3162c8e855c039))
+* includes text into onClick action ([b777887](https://www.github.com/zakodium/react-wafer/commit/b77788722e3385c01f8564b1beae9a1be00fafb5))
+
 ## [2.1.0](https://www.github.com/zakodium/react-wafer/compare/v2.0.0...v2.1.0) (2021-12-13)
 
 
