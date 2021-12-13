@@ -1,5 +1,5 @@
 import type { Value } from 'cheminfo-types';
-import React, { useMemo } from 'react';
+import React, { CSSProperties, useMemo } from 'react';
 
 import { calculateDivisions, listLabels, unifyUnits } from './utils';
 
@@ -16,6 +16,7 @@ export interface WaferProps {
   chipWidth: Value;
   chipHeight: Value;
   size: number;
+  textStyle?: CSSProperties;
   /** List of taken items */
   pickedItems: WaferItem[];
   prepend?: string;
@@ -34,6 +35,7 @@ export function Wafer(props: WaferProps) {
     prepend = '',
     hideText = false,
     selected = [],
+    textStyle = {},
     onSelect,
   } = props;
 
@@ -106,6 +108,7 @@ export function Wafer(props: WaferProps) {
                 y={height / 2}
                 dominantBaseline="middle"
                 textAnchor="middle"
+                style={textStyle}
               >
                 {devices[index].label}
               </text>
@@ -116,7 +119,7 @@ export function Wafer(props: WaferProps) {
       groupsSquares[row] = <g key={row}>{rowGroup}</g>;
     }
     return groupsSquares;
-  }, [rows, columns, height, width, devices, hideText, onSelect]);
+  }, [rows, columns, height, width, devices, hideText, textStyle, onSelect]);
 
   const selectionBorders = useMemo(
     () =>
