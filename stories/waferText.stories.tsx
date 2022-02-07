@@ -12,11 +12,11 @@ export default {
   args: {
     pickedItems: [],
     selected: [],
-    diameter: '300 mm',
+    diameter: '6 inch',
     size: 320,
     hideText: false,
-    chipHeight: '70 mm',
-    chipWidth: '50 mm',
+    chipHeight: '2 cm',
+    chipWidth: '1.8 cm',
     prepend: 'A',
   },
 } as Meta<typeof Wafer>;
