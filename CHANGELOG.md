@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.0](https://www.github.com/zakodium/react-wafer/compare/v2.2.0...v2.3.0) (2022-02-08)
+
+
+### Features
+
+* allow enforce number of rows or columns and add border error ([#14](https://www.github.com/zakodium/react-wafer/issues/14)) ([6c544a4](https://www.github.com/zakodium/react-wafer/commit/6c544a4eb29d6da6db8b5af3099e799ba9ebc62d))
+
 ## [2.2.0](https://www.github.com/zakodium/react-wafer/compare/v2.1.0...v2.2.0) (2021-12-13)
 
 
