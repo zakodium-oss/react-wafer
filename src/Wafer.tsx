@@ -15,6 +15,9 @@ export interface WaferProps {
   diameter: Value;
   chipWidth: Value;
   chipHeight: Value;
+  rows?: number;
+  columns?: number;
+  borderError?: number;
   size: number;
   textStyle?: CSSProperties;
   /** List of taken items */
@@ -30,6 +33,9 @@ export function Wafer(props: WaferProps) {
     diameter,
     chipWidth,
     chipHeight,
+    rows: forcedRows,
+    columns: forcedColumns,
+    borderError = 0,
     size,
     pickedItems = [],
     prepend = '',
@@ -44,8 +50,10 @@ export function Wafer(props: WaferProps) {
     const widthPhysical = unifyUnits(chipWidth);
     const heightPhysical = unifyUnits(chipHeight);
 
-    const columns = calculateDivisions(diameterPhysical, widthPhysical);
-    const rows = calculateDivisions(diameterPhysical, heightPhysical);
+    const columns =
+      forcedColumns ?? calculateDivisions(diameterPhysical, widthPhysical);
+    const rows =
+      forcedRows ?? calculateDivisions(diameterPhysical, heightPhysical);
 
     const widthSvg = size / columns;
     const heightSvg = size / rows;
@@ -58,7 +66,7 @@ export function Wafer(props: WaferProps) {
       height: heightSvg,
       center: size / 2,
     };
-  }, [diameter, chipWidth, chipHeight, size]);
+  }, [diameter, chipWidth, chipHeight, size, forcedColumns, forcedRows]);
 
   const devices = useMemo(
     () =>
@@ -71,8 +79,19 @@ export function Wafer(props: WaferProps) {
         height,
         center,
         radius,
+        borderError,
       }),
-    [prepend, rows, columns, pickedItems, width, height, center, radius],
+    [
+      prepend,
+      rows,
+      columns,
+      pickedItems,
+      width,
+      height,
+      center,
+      radius,
+      borderError,
+    ],
   );
 
   const groupsSquares = useMemo(() => {

@@ -33,9 +33,7 @@ export function unifyUnits(value: Value) {
 }
 
 export function calculateDivisions(diameter: number, length: number) {
-  const divisions = Math.floor(diameter / length);
-  const remainder = diameter % length;
-  return divisions + (remainder > 0 ? 2 : 1);
+  return Math.floor(diameter / length) + 1;
 }
 
 function distance(x: number, y: number, center: number) {
@@ -74,6 +72,7 @@ interface LabelsParams {
   height: number;
   center: number;
   radius: number;
+  borderError: number;
 }
 
 /**
@@ -91,6 +90,7 @@ export function listLabels({
   height,
   center,
   radius,
+  borderError,
 }: LabelsParams): Array<{ label: string; picked: boolean }> {
   let labels = new Array(rows * columns);
   let index = 0;
@@ -106,7 +106,7 @@ export function listLabels({
         center,
       });
 
-      if (pointRadius >= radius) {
+      if (pointRadius >= radius * (borderError + 1)) {
         labels[index] = { label: '', picked: false };
       } else {
         const label = `${prepend}${++currNumber}`;
