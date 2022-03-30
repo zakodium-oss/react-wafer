@@ -5,7 +5,7 @@
 
 Render wafer partition in react.
 
-## [Storybook](https://zakodium.github.io/react-wafer/)
+## [Storybook](https://zakodium-oss.github.io/react-wafer/)
 
 ## Installation
 

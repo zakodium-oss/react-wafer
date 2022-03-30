@@ -1,7 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import React from 'react';
 
-
 import { Wafer, WaferProps } from '../src';
 
 export default {
