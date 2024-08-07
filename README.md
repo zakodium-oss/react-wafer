@@ -3,9 +3,9 @@
 [![NPM version][npm-image]][npm-url]
 [![npm download][download-image]][download-url]
 
-Render wafer partition in react.
+Render wafer partition in React.
 
-## [Storybook](https://zakodium-oss.github.io/react-wafer/)
+## [Storybook](https://react-wafer.pages.dev/)
 
 ## Installation
 

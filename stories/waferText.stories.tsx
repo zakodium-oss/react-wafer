@@ -1,4 +1,3 @@
-import { Meta } from '@storybook/react';
 import React from 'react';
 
 import { fromTextToValue, Wafer, WaferProps } from '../src';
@@ -19,7 +18,7 @@ export default {
     chipWidth: '1.8 cm',
     prepend: 'A',
   },
-} as Meta<typeof Wafer>;
+};
 
 type PropsList = 'diameter' | 'chipHeight' | 'chipWidth';
 type TemplateArgs = Exclude<WaferProps, PropsList> & Record<PropsList, string>;

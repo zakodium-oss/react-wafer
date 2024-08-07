@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { Meta, type StoryFn } from '@storybook/react';
 import React from 'react';
 
 import { Wafer, WaferProps } from '../src';
@@ -15,9 +15,9 @@ export default {
     diameter: { value: 300, units: 'mm' },
     size: 320,
   },
-} as ComponentMeta<typeof Wafer>;
+} satisfies Meta<WaferProps>;
 
-const Template: ComponentStory<typeof Wafer> = (args) => <Wafer {...args} />;
+const Template: StoryFn<WaferProps> = (args) => <Wafer {...args} />;
 
 export const Basic = Template.bind({});
 Basic.storyName = 'Simple example';
@@ -25,7 +25,7 @@ Basic.args = {
   chipHeight: { value: 70, units: 'mm' },
   chipWidth: { value: 50, units: 'mm' },
   hideText: false,
-} as WaferProps;
+} satisfies Partial<WaferProps>;
 
 export const Dens = Template.bind({});
 Dens.storyName = 'Dense example';
@@ -34,4 +34,4 @@ Dens.args = {
   chipHeight: { value: 20, units: 'mm' },
   chipWidth: { value: 20, units: 'mm' },
   hideText: true,
-} as WaferProps;
+} satisfies Partial<WaferProps>;
