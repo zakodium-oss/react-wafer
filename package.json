@@ -51,7 +51,6 @@
     "@storybook/addon-storysource": "^8.2.8",
     "@storybook/react": "^8.2.8",
     "@storybook/react-vite": "^8.2.8",
-    "@storybook/react-webpack5": "^8.2.8",
     "@types/js-quantities": "^1.6.6",
     "@types/react": "^18.3.3",
     "@zakodium/eslint-config": "^5.1.1",
